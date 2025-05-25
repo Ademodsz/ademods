@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Handling.cfg Editor</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input[type="file"], select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      width: 40%;
+      margin: 0;
+    }
+
+    .form-group input {
+      width: 58%;
+    }
+
+    .button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Edit handling.cfg By Ademods</h2>
+    <input type="file" id="fileInput" accept=".cfg" />
+    <label for="vehicleSelect">Pilih Kendaraan:</label>
+    <select id="vehicleSelect"></select>
+
+    <div id="editor" style="display:none;">
+      <div class="form-group">
+        <label for="massInput">Mass [Berat1]</label>
+        <input id="massInput" type="text">
+      </div>
+      <div class="form-group">
+        <label for="turnmassInput">Turnmass [Berat2]</label>
+        <input id="turnmassInput" type="text">
+      </div>
+      <div class="form-group">
+        <label for="dragInput">Drag [Mesin]</label>
+        <input id="dragInput" type="text">
+      </div>
+      <div class="form-group">
+        <label for="transmissionInput">Transmission [Kecepatan]</label>
+        <input id="transmissionInput" type="text">
+      </div>
+      <div class="form-group">
+        <label for="brakesInput">Brakes [Rem]</label>
+        <input id="brakesInput" type="text">
+      </div>
+      <button class="button" onclick="downloadFile()">Download</button>
+    </div>
+  </div>
+
+  <script>
+    let lines = [];
+    let selectedIndex = -1;
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        lines = reader.result.split(/\r?\n/);
+        const select = document.getElementById('vehicleSelect');
+        select.innerHTML = '';
+
+        lines.forEach((line, index) => {
+          const parts = line.trim().split(/\s+/);
+          if (parts.length > 1 && !line.trim().startsWith(';')) {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = parts[0];
+            select.appendChild(option);
+          }
+        });
+
+        if (select.options.length > 0) {
+          select.selectedIndex = 0;
+          select.dispatchEvent(new Event('change'));
+        }
+      };
+      reader.readAsText(e.target.files[0]);
+    });
+
+    document.getElementById('vehicleSelect').addEventListener('change', function() {
+      selectedIndex = parseInt(this.value);
+      const parts = lines[selectedIndex].trim().split(/\s+/);
+
+      document.getElementById('massInput').value = parts[1] || '';
+      document.getElementById('turnmassInput').value = parts[2] || '';
+      document.getElementById('dragInput').value = parts[3] || '';
+      document.getElementById('transmissionInput').value = parts.slice(11, 15).join(' ');
+      document.getElementById('brakesInput').value = parts[17] || '';
+      document.getElementById('editor').style.display = 'block';
+    });
+
+    function downloadFile() {
+      if (selectedIndex >= 0) {
+        const parts = lines[selectedIndex].trim().split(/\s+/);
+        parts[1] = document.getElementById('massInput').value;
+        parts[2] = document.getElementById('turnmassInput').value;
+        parts[3] = document.getElementById('dragInput').value;
+
+        const transValues = document.getElementById('transmissionInput').value.trim().split(/\s+/);
+        for (let i = 0; i < 4; i++) {
+          parts[11 + i] = transValues[i] || parts[11 + i];
+        }
+
+        parts[16] = document.getElementById('brakesInput').value;
+
+        lines[selectedIndex] = parts.join('\t');
+      }
+
+      const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'handling.cfg';
+      link.click();
+    }
+  </script>
+</body>
+</html>

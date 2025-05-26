@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoID - NetAD Streaming</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/PVt6aSA.png">
+</head>
+<body>
+    <header>
+        <a href="index.html"><img src="https://i.imgur.com/PVt6aSA.png" alt="Netflix Logo" class="logo"></a>
+    </header>
+
+    <div class="loading">Loading...</div>
+
+    <div class="server-buttons">
+    <button onclick="changeServer(1)">Server 1</button>
+    <button onclick="changeServer(2)">Server 2</button>
+</div>
+
+    <div class="player-container">
+        <iframe id="videoPlayer" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="controls">
+        <button onclick="toggleFullScreen()">Layar Penuh</button>
+        <a id="downloadButton" class="download-btn" target="_blank">Download Video</a>
+    </div>
+
+    <footer>
+        <p>Copyright © 2025 Ademods. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId1 = urlParams.get("id1"); // ID untuk Server 1
+        const videoId2 = urlParams.get("id2"); // ID untuk Server 2
+        const videoPlayer = document.getElementById("videoPlayer");
+        const loading = document.querySelector(".loading");
+
+        if (videoId1 || videoId2) {
+            loading.style.display = "block";
+            changeServer(1); // Default ke Server 1
+        }
+    });
+
+    function changeServer(server) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId1 = urlParams.get("id1"); // ID untuk Server 1
+        const videoId2 = urlParams.get("id2"); // ID untuk Server 2
+        const videoPlayer = document.getElementById("videoPlayer");
+        const loading = document.querySelector(".loading");
+
+        loading.style.display = "block";
+
+        if (server === 1 && videoId1) {
+            videoPlayer.src = `https://drive.google.com/file/d/${videoId1}/preview`;
+            document.getElementById("downloadButton").href = `https://bit.ly/${videoId1}`;
+        } else if (server === 2 && videoId2) {
+            videoPlayer.src = `https://www.dailymotion.com/embed/video/${videoId2}`;
+            document.getElementById("downloadButton").href = `https://bit.ly/${videoId2}`;
+        }
+
+        videoPlayer.onload = () => loading.style.display = "none";
+    }
+
+    function toggleFullScreen() {
+        let videoFrame = document.getElementById("videoPlayer");
+        if (videoFrame.requestFullscreen) {
+            videoFrame.requestFullscreen();
+        }
+    }
+</script>
+</body>
+</html>

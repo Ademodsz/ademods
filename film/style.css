@@ -1,0 +1,211 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #141414;
+    flex-wrap: wrap;
+}
+
+.logo {
+    height: 40px;
+}
+
+#searchInput, #yearFilter, #toggleMode {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+#toggleMode {
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}
+
+/* MOVIE LIST */
+.movie-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 movie per row */
+    gap: 20px;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #141414;
+}
+
+.movie {
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.movie:hover {
+    transform: scale(1.05);
+}
+
+.movie img {
+    width: 100%;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.movie p {
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    margin-top: 10px;
+}
+
+/* PLAYER */
+.player-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+iframe {
+    width: 90%;
+    max-width: 900px;
+    height: 55vh;
+    border-radius: 10px;
+}
+
+/* CONTROLS */
+.controls {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.download-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.download-btn:hover {
+    background-color: darkred;
+}
+
+/* FOOTER (COPYRIGHT DI BAWAH TENGAH) */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #141414;
+    margin-top: auto;
+    font-size: 14px;
+}
+
+/* DARK MODE */
+.dark-mode {
+    background-color: #222;
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .movie-container {
+        grid-template-columns: repeat(4, 1fr); /* Tetap 4 movie per row */
+    }
+
+    iframe {
+        height: 50vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-container {
+        grid-template-columns: repeat(4, 1fr); /* Tetap 4 movie per row */
+    }
+
+    iframe {
+        height: 55vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-container {
+        grid-template-columns: repeat(4, 1fr); /* Tetap 4 movie per row */
+    }
+
+    iframe {
+        height: 60vh;
+    }
+}
+
+.admin-contact {
+    background-color: #222; /* Warna latar belakang */
+    color: #fff; /* Warna teks */
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.admin-contact a {
+    color: #ff0000; /* Warna link merah */
+    text-decoration: none;
+}
+
+.admin-contact a:hover {
+    text-decoration: underline;
+}
+
+#genreFilter {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+/* SERVER EMBED BUTTON */
+.server-buttons {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.server-buttons button {
+    background-color: #333;
+    color: red;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 5px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.server-buttons button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+.server-buttons button:active {
+    background-color: #777;
+    transform: scale(1);
+}

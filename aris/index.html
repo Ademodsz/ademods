@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Batu Gunting Kertas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap " rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .game-container {
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .cheat-input,
+    .reset-button {
+      margin-bottom: 20px;
+    }
+
+    .cheat-input input {
+      padding: 5px;
+      font-size: 16px;
+      width: 80%;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .cheat-input button,
+    .reset-button button {
+      padding: 8px 16px;
+      font-size: 16px;
+      background: #222;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 0 10px white;
+    }
+
+    .stats,
+    .chance-display {
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px black;
+    }
+
+    .choices button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 16px;
+      background: #222;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px white;
+      transition: transform 0.2s ease;
+    }
+
+    .choices button:hover {
+      transform: scale(1.1);
+    }
+
+    .bot-choice {
+      margin-top: 10px;
+      font-size: 24px;
+      color: yellow;
+      text-shadow: 2px 2px 4px black;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 20px;
+      box-shadow: 0 0 10px white;
+      z-index: 100;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .toast.show {
+      top: 20px;
+      opacity: 1;
+    }
+
+    /* Footer Credit */
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      color: gray;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-container">
+  <h1>🎮 Batu Gunting Kertas</h1>
+
+  <!-- Input Cheat -->
+  <div class="cheat-input">
+    <input type="text" id="cheatCode" placeholder="Masukkan kode cheat...">
+    <br>
+    <button onclick="checkCheat()">Submit</button>
+  </div>
+
+  <!-- Tombol Reset -->
+  <div class="reset-button">
+    <button onclick="resetStats()">Reset</button>
+  </div>
+
+  <!-- Tampilkan statistik -->
+  <div class="stats" id="stats">
+    Menang: 0<br>
+    Kalah: 0<br>
+    Seri: 0
+  </div>
+
+  <!-- Tampilkan peluang -->
+  <div class="chance-display" id="chanceDisplay" style="display: none;">
+    Peluang: Menang 1% | Seri 2% | Kalah 97%
+  </div>
+
+  <div class="choices">
+    <button onclick="play('batu')">✊ Batu</button>
+    <button onclick="play('gunting')">✌️ Gunting</button>
+    <button onclick="play('kertas')">🖐️ Kertas</button>
+  </div>
+
+  <div id="botChoice" class="bot-choice"></div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Footer Credit -->
+  <div class="footer">
+    Source: from AdiDesign
+  </div>
+</div>
+
+<!-- Audio -->
+<audio id="winSound" src="applause.mp3"></audio>
+<audio id="loseSound" src="laugh.mp3"></audio>
+
+<script>
+  const botChoiceDiv = document.getElementById("botChoice");
+  const statsDiv = document.getElementById("stats");
+  const chanceDisplay = document.getElementById("chanceDisplay");
+
+  const winSound = document.getElementById("winSound");
+  const loseSound = document.getElementById("loseSound");
+  const toast = document.getElementById("toast");
+
+  // Ambil atau inisiasi data
+  let stats = JSON.parse(localStorage.getItem("rpsStats")) || {
+    win: 0,
+    lose: 0,
+    draw: 0
+  };
+
+  let cheatMode = localStorage.getItem("cheatMode") === "true";
+  let showChances = localStorage.getItem("showChances") === "true";
+
+  // Status pesan khusus
+  let specialMessageShown = localStorage.getItem("specialMessageShown") === "true";
+
+  function updateStatsDisplay() {
+    statsDiv.innerHTML = `
+      Menang: ${stats.win}<br>
+      Kalah: ${stats.lose}<br>
+      Seri: ${stats.draw}
+    `;
+    chanceDisplay.style.display = showChances ? "block" : "none";
+  }
+
+  updateStatsDisplay();
+
+  function checkCheat() {
+    const code = document.getElementById("cheatCode").value.trim().toUpperCase();
+
+    if (code === "MAS ARIS KIW KIW") {
+      cheatMode = true;
+      localStorage.setItem("cheatMode", "true");
+      showEffect("❤️"); // Animasi love
+      showToast("Cheat Aktif!\nPeluang menang 100%\nTeks khusus: hai cantik");
+    } else if (code === "IYA AKU DONGO") {
+      showChances = true;
+      localStorage.setItem("showChances", "true");
+      showEffect("😂", true); // Animasi laugh
+      chanceDisplay.style.display = "block";
+      showToast("Peluang ditampilkan!");
+    } else {
+      // Acak antara dua pesan jika salah
+      const randomMsg = Math.random() > 0.5 ? "jangan maksa dongo" : "dih ngeyel";
+      showToast(randomMsg);
+    }
+  }
+
+  function resetStats() {
+    if (confirm("Yakin ingin mereset semua data?")) {
+      stats = {
+        win: 0,
+        lose: 0,
+        draw: 0
+      };
+      cheatMode = false;
+      showChances = false;
+      specialMessageShown = false;
+
+      localStorage.removeItem("rpsStats");
+      localStorage.removeItem("cheatMode");
+      localStorage.removeItem("showChances");
+      localStorage.removeItem("specialMessageShown");
+
+      updateStatsDisplay();
+      showToast("Data telah direset.");
+    }
+  }
+
+  function getBotChoiceBasedOnOutcome(playerChoice, outcome) {
+    if (outcome === "win") {
+      if (playerChoice === "batu") return "gunting";
+      if (playerChoice === "gunting") return "kertas";
+      if (playerChoice === "kertas") return "batu";
+    } else if (outcome === "lose") {
+      if (playerChoice === "batu") return "kertas";
+      if (playerChoice === "gunting") return "batu";
+      if (playerChoice === "kertas") return "gunting";
+    } else {
+      return playerChoice; // seri
+    }
+  }
+
+  function play(playerChoice) {
+    document.querySelectorAll(".choices button").forEach(button => {
+      button.disabled = true;
+    });
+
+    let outcome;
+
+    if (cheatMode) {
+      outcome = "win"; // 100% menang
+    } else {
+      const roll = Math.random() * 100;
+      if (roll < 1) {
+        outcome = "win"; // 1%
+      } else if (roll < 3) {
+        outcome = "draw"; // 2%
+      } else {
+        outcome = "lose"; // 97%
+      }
+    }
+
+    const botChoice = getBotChoiceBasedOnOutcome(playerChoice, outcome);
+
+    let botEmoticon = "";
+    if (botChoice === 'batu') {
+      botEmoticon = "Bot memilih: ✊ Batu";
+    } else if (botChoice === 'gunting') {
+      botEmoticon = "Bot memilih: ✌️ Gunting";
+    } else {
+      botEmoticon = "Bot memilih: 🖐️ Kertas";
+    }
+    botChoiceDiv.textContent = botEmoticon;
+
+    let message = "";
+
+    if (outcome === "win") {
+      if (cheatMode) {
+        message = "hai cantik";
+      } else {
+        message = "cieee menang";
+        stats.win++;
+        winSound.currentTime = 0;
+        winSound.play();
+      }
+    } else if (outcome === "draw") {
+      message = "Seri!";
+      stats.draw++;
+    } else {
+      message = ["aduh dongonya", "bisa main ga si", "yahahaha"][
+        Math.floor(Math.random() * 3)
+      ];
+      stats.lose++;
+      loseSound.currentTime = 0;
+      loseSound.play();
+    }
+
+    // Simpan statistik
+    localStorage.setItem("rpsStats", JSON.stringify(stats));
+    updateStatsDisplay();
+
+    // Cek apakah sudah kalah 10x dan belum pernah ditampilkan
+    if (stats.lose >= 10 && !specialMessageShown) {
+      showToast("utututu kacian kalah😂😂");
+      specialMessageShown = true;
+      localStorage.setItem("specialMessageShown", "true");
+    } else {
+      showToast(message);
+    }
+
+    setTimeout(() => {
+      botChoiceDiv.textContent = "";
+      document.querySelectorAll(".choices button").forEach(button => {
+        button.disabled = false;
+      });
+    }, 2500);
+  }
+
+  function showEffect(icon, isLaugh = false) {
+    const effect = document.createElement("div");
+    effect.className = "effect";
+    if (isLaugh) effect.classList.add("laugh-effect");
+    effect.textContent = icon;
+    document.body.appendChild(effect);
+
+    setTimeout(() => {
+      effect.remove();
+    }, 1000);
+  }
+
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.remove("show");
+    void toast.offsetWidth; // force reflow untuk restart animasi
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+    }, 2500);
+  }
+</script>
+
+</body>
+</html>

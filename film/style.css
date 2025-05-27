@@ -209,3 +209,13 @@ footer {
     background-color: #777;
     transform: scale(1);
 }
+
+.ads-banner {
+    margin: 30px auto;
+    padding: 10px;
+    max-width: 100%;
+    text-align: center;
+    background-color: #111; /* agar beda background dari movie container */
+    border: 2px dashed #444;
+    border-radius: 8px;
+}

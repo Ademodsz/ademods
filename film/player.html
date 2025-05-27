@@ -1,81 +1,88 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoID - NetAD Streaming</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="https://i.imgur.com/PVt6aSA.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VideoID - NetAD Streaming</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="https://i.imgur.com/PVt6aSA.png">
 </head>
-    <script type='text/javascript' src='//pl26765206.profitableratecpm.com/24/b7/78/24b7785b4c550b4d9b889a56e6bae5df.js'></script>
-    <script type='text/javascript' src='//pl26764973.profitableratecpm.com/4f/49/b3/4f49b32ff73a693fdc4fd4df91a7da14.js'></script>
-    <script async="async" data-cfasync="false" src="//pl26765335.profitableratecpm.com/5c8502ad0b8d7e6da0ed6cac9b133099/invoke.js"></script>
-<div id="container-5c8502ad0b8d7e6da0ed6cac9b133099"></div>
 <body>
-    <header>
-        <a href="index.html"><img src="https://i.imgur.com/PVt6aSA.png" alt="Netflix Logo" class="logo"></a>
-    </header>
+  <header>
+    <a href="index.html"><img src="https://i.imgur.com/PVt6aSA.png" alt="Netflix Logo" class="logo"></a>
+  </header>
 
-    <div class="loading">Loading...</div>
+  <div class="loading">Loading...</div>
 
-    <div class="server-buttons">
+  <div class="server-buttons">
     <button onclick="changeServer(1)">Server 1</button>
     <button onclick="changeServer(2)">Server 2</button>
-</div>
+  </div>
 
-    <div class="player-container">
-        <iframe id="videoPlayer" frameborder="0" allowfullscreen></iframe>
-    </div>
+  <div class="player-container">
+    <iframe id="videoPlayer" frameborder="0" allowfullscreen></iframe>
+  </div>
 
-    <div class="controls">
-        <button onclick="toggleFullScreen()">Layar Penuh</button>
-        <a id="downloadButton" class="download-btn" target="_blank">Download Video</a>
-    </div>
+  <div class="controls">
+    <button onclick="toggleFullScreen()">Layar Penuh</button>
+    <a id="downloadButton" class="download-btn" target="_blank">Download Video</a>
+  </div>
 
-    <footer>
-        <p>Copyright © 2025 Ademods. All Rights Reserved.</p>
-    </footer>
+  <!-- Iklan di bawah tombol download -->
+  <div style="margin-top: 10px; text-align: center;">
+    <script async="async" data-cfasync="false" src="//pl26765335.profitableratecpm.com/5c8502ad0b8d7e6da0ed6cac9b133099/invoke.js"></script>
+    <div id="container-5c8502ad0b8d7e6da0ed6cac9b133099"></div>
+  </div>
 
-    <script>
+  <footer>
+    <p>Copyright © 2025 Ademods. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Sticky iklan bawah (opsional, bisa dihapus) -->
+  <div style="position: fixed; bottom: 0; width: 100%; z-index: 9999; text-align: center; background: #000;">
+    <script type='text/javascript' src='//pl26765206.profitableratecpm.com/24/b7/78/24b7785b4c550b4d9b889a56e6bae5df.js'></script>
+  </div>
+
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const videoId1 = urlParams.get("id1"); // ID untuk Server 1
-        const videoId2 = urlParams.get("id2"); // ID untuk Server 2
-        const videoPlayer = document.getElementById("videoPlayer");
-        const loading = document.querySelector(".loading");
+      const urlParams = new URLSearchParams(window.location.search);
+      const videoId1 = urlParams.get("id1");
+      const videoId2 = urlParams.get("id2");
+      const videoPlayer = document.getElementById("videoPlayer");
+      const loading = document.querySelector(".loading");
 
-        if (videoId1 || videoId2) {
-            loading.style.display = "block";
-            changeServer(1); // Default ke Server 1
-        }
+      if (videoId1 || videoId2) {
+        loading.style.display = "block";
+        changeServer(1);
+      }
     });
 
     function changeServer(server) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const videoId1 = urlParams.get("id1"); // ID untuk Server 1
-        const videoId2 = urlParams.get("id2"); // ID untuk Server 2
-        const videoPlayer = document.getElementById("videoPlayer");
-        const loading = document.querySelector(".loading");
+      const urlParams = new URLSearchParams(window.location.search);
+      const videoId1 = urlParams.get("id1");
+      const videoId2 = urlParams.get("id2");
+      const videoPlayer = document.getElementById("videoPlayer");
+      const loading = document.querySelector(".loading");
 
-        loading.style.display = "block";
+      loading.style.display = "block";
 
-        if (server === 1 && videoId1) {
-            videoPlayer.src = `https://drive.google.com/file/d/${videoId1}/preview`;
-            document.getElementById("downloadButton").href = `https://bit.ly/${videoId1}`;
-        } else if (server === 2 && videoId2) {
-            videoPlayer.src = `https://www.dailymotion.com/embed/video/${videoId2}`;
-            document.getElementById("downloadButton").href = `https://bit.ly/${videoId2}`;
-        }
+      if (server === 1 && videoId1) {
+        videoPlayer.src = `https://drive.google.com/file/d/${videoId1}/preview`;
+        document.getElementById("downloadButton").href = `https://bit.ly/${videoId1}`;
+      } else if (server === 2 && videoId2) {
+        videoPlayer.src = `https://www.dailymotion.com/embed/video/${videoId2}`;
+        document.getElementById("downloadButton").href = `https://bit.ly/${videoId2}`;
+      }
 
-        videoPlayer.onload = () => loading.style.display = "none";
+      videoPlayer.onload = () => loading.style.display = "none";
     }
 
     function toggleFullScreen() {
-        let videoFrame = document.getElementById("videoPlayer");
-        if (videoFrame.requestFullscreen) {
-            videoFrame.requestFullscreen();
-        }
+      let videoFrame = document.getElementById("videoPlayer");
+      if (videoFrame.requestFullscreen) {
+        videoFrame.requestFullscreen();
+      }
     }
-</script>
+  </script>
 </body>
 </html>

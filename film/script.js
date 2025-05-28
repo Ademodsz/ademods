@@ -1,8 +1,18 @@
+<script>
 document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
     const yearFilter = document.getElementById("yearFilter");
     const genreFilter = document.getElementById("genreFilter");
-    const movies = document.querySelectorAll(".movie");
+    const movies = Array.from(document.querySelectorAll(".movie"));
+
+    const paginationContainer = document.createElement("div");
+    paginationContainer.id = "pagination";
+    paginationContainer.style.textAlign = "center";
+    paginationContainer.style.margin = "20px";
+    document.body.appendChild(paginationContainer);
+
+    const moviesPerPage = 16;
+    let currentPage = 1;
 
     // Generate daftar tahun secara otomatis
     let years = new Set();
@@ -20,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedYear = yearFilter.value;
         const selectedGenre = genreFilter.value;
 
-        movies.forEach(movie => {
+        const filtered = movies.filter(movie => {
             const title = movie.dataset.title.toLowerCase();
             const year = movie.dataset.year;
             const genres = movie.dataset.genre.split(",");
@@ -29,13 +39,52 @@ document.addEventListener("DOMContentLoaded", function () {
             const matchesYear = selectedYear === "all" || year === selectedYear;
             const matchesGenre = selectedGenre === "all" || genres.includes(selectedGenre);
 
-            movie.style.display = matchesSearch && matchesYear && matchesGenre ? "block" : "none";
+            return matchesSearch && matchesYear && matchesGenre;
+        });
+
+        renderPage(filtered, currentPage);
+        renderPagination(filtered);
+    }
+
+    function renderPage(filteredMovies, page) {
+        movies.forEach(movie => movie.style.display = "none");
+
+        const start = (page - 1) * moviesPerPage;
+        const end = start + moviesPerPage;
+
+        filteredMovies.slice(start, end).forEach(movie => {
+            movie.style.display = "block";
         });
     }
 
-    searchInput.addEventListener("input", filterMovies);
-    yearFilter.addEventListener("change", filterMovies);
-    genreFilter.addEventListener("change", filterMovies);
+    function renderPagination(filteredMovies) {
+        const totalPages = Math.ceil(filteredMovies.length / moviesPerPage);
+        paginationContainer.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            if (i === currentPage) btn.classList.add("active-page");
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderPage(filteredMovies, currentPage);
+            });
+            paginationContainer.appendChild(btn);
+        }
+    }
+
+    searchInput.addEventListener("input", () => {
+        currentPage = 1;
+        filterMovies();
+    });
+    yearFilter.addEventListener("change", () => {
+        currentPage = 1;
+        filterMovies();
+    });
+    genreFilter.addEventListener("change", () => {
+        currentPage = 1;
+        filterMovies();
+    });
 
     // Tambahkan event listener untuk klik film
     movies.forEach(movie => {
@@ -51,4 +100,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.body.classList.toggle("dark-mode");
         toggleMode.textContent = document.body.classList.contains("dark-mode") ? "☀ Mode Terang" : "🌙 Mode Gelap";
     });
+
+    // Inisialisasi awal
+    filterMovies();
 });
+</script>

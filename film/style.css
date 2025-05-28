@@ -220,15 +220,4 @@ footer {
     border-radius: 8px;
 }
 
-#pagination button {
-  padding: 6px 12px;
-  margin: 3px;
-  border: none;
-  background-color: #444;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-#pagination .active-page {
-  background-color: #f00;
-}
+

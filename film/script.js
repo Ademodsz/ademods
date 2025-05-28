@@ -52,8 +52,17 @@ document.addEventListener("DOMContentLoaded", function () {
         const start = (page - 1) * moviesPerPage;
         const end = start + moviesPerPage;
 
-        filteredMovies.slice(start, end).forEach(movie => {
+        const currentMovies = filteredMovies.slice(start, end);
+        currentMovies.forEach(movie => {
             movie.style.display = "block";
+        });
+
+        // Tambahkan ulang event listener ke movie yang sedang ditampilkan
+        currentMovies.forEach(movie => {
+            movie.onclick = () => {
+                const id1 = movie.dataset.id1;
+                window.location.href = `player.html?id1=${id1}`;
+            };
         });
     }
 
@@ -84,14 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
     genreFilter.addEventListener("change", () => {
         currentPage = 1;
         filterMovies();
-    });
-
-    // Tambahkan event listener untuk klik film
-    movies.forEach(movie => {
-        movie.addEventListener("click", () => {
-            const id1 = movie.dataset.id1;
-            window.location.href = `player.html?id1=${id1}`;
-        });
     });
 
     // Mode gelap/terang

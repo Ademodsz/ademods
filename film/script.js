@@ -41,8 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     movies.forEach(movie => {
         movie.addEventListener("click", () => {
             const id1 = movie.dataset.id1;
-            const id2 = movie.dataset.id2;
-            window.location.href = `player.html?id1=${id1}&id2=${id2}`;
+            window.location.href = `player.html?id1=${id1}`;
         });
     });
 

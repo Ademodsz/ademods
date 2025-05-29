@@ -219,3 +219,136 @@ footer {
     border: 2px dashed #444;
     border-radius: 8px;
 }
+
+.pagination-controls {
+  margin-top: 20px;
+  text-align: center;
+}
+.pagination-controls button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.pagination-controls button.active {
+  background: #f00;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.pagination-controls {
+  margin: 20px auto 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pagination-controls button.active {
+  background-color: red;
+  color: white;
+}
+
+.pagination-controls button:disabled {
+  background-color: #888;
+  cursor: default;
+}
+
+<style>
+#pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+#pagination button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    background-color: #444;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#pagination button.active {
+    background-color: red;
+}
+
+#pagination button:hover {
+    background-color: #666;
+}
+</style>
+
+.movie {
+    min-height: 250px; /* Sesuaikan tinggi minimal film agar layout stabil */
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+#pagination {
+    display: flex;
+    justify-content: center;     /* Tengahkan isi */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    position: relative;
+}
+
+#pagination button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#pagination button.active {
+    background-color: red;
+}
+
+#pagination button:hover {
+    background-color: #555;
+}
